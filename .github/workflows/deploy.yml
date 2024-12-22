@@ -20,7 +20,7 @@ jobs:
     
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST_IP }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST_IP }} << 'EOF'
           cd /var/www/demo
           sudo git pull origin main  # Pull the latest changes from the main branch
           sudo systemctl restart nginx  # Restart Nginx to apply changes
