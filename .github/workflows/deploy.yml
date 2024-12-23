@@ -19,8 +19,9 @@ jobs:
         chmod +x phpcs.phar
         sudo mv phpcs.phar /usr/local/bin/phpcs
 
-    - name: Clone WordPress Coding Standards
+    - name: Set up Git with correct credentials
       run: |
+        git config --global credential.helper store
         git clone https://github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
         phpcs --config-set installed_paths /tmp/wpcs
 
