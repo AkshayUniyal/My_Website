@@ -13,20 +13,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up PHP 8.3
+    - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3'  # Use PHP 8.3
-        extensions: mbstring, xml, curl  # Specify any necessary PHP extensions
+        php-version: '8.3'  # Use PHP 8.3 as per your setup
+
+    - name: Install PHP CodeSniffer
+      run: |
+        curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+        chmod +x phpcs.phar
+        sudo mv phpcs.phar /usr/local/bin/phpcs
 
     - name: Run WordPress Coding Standards
       run: |
-        cd wp-content/themes/twentytwentythree
-        vendor/bin/phpcs --standard=WordPress .  # Run WordPress coding standards check (if applicable)
+        phpcs --standard=WordPress wp-content/themes/twentytwentythree
 
     - name: Archive Built Code
-      run: |
-        tar -czf build.tar.gz wp-content  # Create a tarball of the wp-content directory
+      run: tar -czf build.tar.gz wp-content
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
