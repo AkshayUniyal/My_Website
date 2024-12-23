@@ -21,7 +21,7 @@ jobs:
 
     - name: Install Composer Dependencies
       run: |
-        cd wp-content/themes/your-theme
+        cd wp-content/themes/twentytwentythree
         composer install  # Install PHP dependencies for the theme
 
     - name: Install NPM Dependencies
