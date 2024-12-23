@@ -12,7 +12,7 @@ Website Url - https://myprojec13.zapto.org/
 
 ## VPS Setup ## 
 
-* Launched an EC2 instance with latest Ubuntu24 Ami using AWS aacount ( used .pem file for rstricted ssh )
+* Launched an EC2 instance with latest Ubuntu24 Ami using AWS aacount ( used .pem file for restricted ssh )
 * Attached proper Security group configuration
 * Setup Proper Firewall using ufw on the instance
 * Created a new user - (project) with root privileges on this instance
