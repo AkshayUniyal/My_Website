@@ -17,7 +17,7 @@ jobs:
       run: find . -name "*.php" -exec php -l {} \;
 
     - name: Run WordPress Coding Standards
-      uses: docker://ghcr.io/squizlabs/php_codesniffer:latest
+      uses: docker://squizlabs/php_codesniffer
       with:
         args: phpcs --standard=WordPress .
 
