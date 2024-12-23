@@ -19,7 +19,7 @@ jobs:
         echo "https://x-access-token:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
 
     - name: Clone WordPress Coding Standards
-      run: git clone https://github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
+      run: git clone https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git /tmp/wpcs
 
     - name: Install PHP CodeSniffer
       run: |
