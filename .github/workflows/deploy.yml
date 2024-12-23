@@ -13,23 +13,35 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Validate PHP Syntax
-      run: find . -name "*.php" -exec php -l {} \;
-
-    - name: Run WordPress Coding Standards
-      uses: docker://ghcr.io/squizlabs/php_codesniffer:latest
+    - name: Set up PHP 8.3
+      uses: shivammathur/setup-php@v2
       with:
-        args: phpcs --standard=WordPress .
+        php-version: '8.3'  # Use PHP 8.3
+        extensions: mbstring, xml, curl  # Specify any necessary PHP extensions
+
+    - name: Install Composer Dependencies
+      run: |
+        cd wp-content/themes/your-theme
+        composer install  # Install PHP dependencies for the theme
+
+    - name: Install NPM Dependencies
+      run: |
+        cd wp-content/themes/your-theme
+        npm install  # Install JavaScript dependencies
 
     - name: Build WordPress Theme/Plugin
       run: |
         cd wp-content/themes/your-theme
-        composer install
-        npm install
-        npm run build
+        npm run build  # Build assets using npm
+
+    - name: Run WordPress Coding Standards
+      run: |
+        cd wp-content/themes/your-theme
+        vendor/bin/phpcs --standard=WordPress .  # Run WordPress coding standards check
 
     - name: Archive Built Code
-      run: tar -czf build.tar.gz wp-content
+      run: |
+        tar -czf build.tar.gz wp-content  # Create a tarball of the wp-content directory
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
