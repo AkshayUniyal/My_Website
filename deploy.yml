@@ -1,0 +1,71 @@
+name: Test, Build, and Deploy
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on push to the main branch
+
+jobs:
+  # Job 1: Test and Build
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install PHP CodeSniffer
+      run: |
+        curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+        chmod +x phpcs.phar
+        sudo mv phpcs.phar /usr/local/bin/phpcs
+
+    - name: Set up Git with GitHub token
+      run: |
+        git config --global credential.helper store
+        git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
+        phpcs --config-set installed_paths /tmp/wpcs
+
+    - name: Run WordPress Coding Standards
+      run: phpcs --standard=WordPress wp-content/themes/twentytwentythree
+
+    - name: Build WordPress Theme/Plugin
+      run: |
+        cd wp-content/themes/twentytwentythree
+        # Assuming you don't use Composer or NPM, you can skip these
+        # If you do need them, add them back as needed
+        echo "Building WordPress theme..."
+
+    - name: Archive Built Code
+      run: tar -czf build.tar.gz wp-content
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build.tar.gz
+
+  # Job 2: Deploy to EC2
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test-and-build  # Only run after test-and-build completes successfully
+
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.HOST_IP }}:/tmp/build.tar.gz
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST_IP }} << 'EOF'
+          cd /var/www/demo
+          tar -xzf /tmp/build.tar.gz -C .
+          sudo systemctl restart nginx
+        EOF
+
