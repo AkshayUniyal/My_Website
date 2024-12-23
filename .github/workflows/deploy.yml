@@ -13,17 +13,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install Composer
+      run: |
+        curl -sS https://getcomposer.org/installer | php
+        sudo mv composer.phar /usr/local/bin/composer  # Move composer to global path
+
+    - name: Install WordPress Coding Standard
+      run: |
+        composer require --dev wp-coding-standards/wpcs
+
     - name: Validate PHP Syntax
       run: find . -name "*.php" -exec php -l {} \;
 
-    - name: Install PHP CodeSniffer
-      run: |
-        curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-        chmod +x phpcs.phar
-        sudo mv phpcs.phar /usr/local/bin/phpcs
-
     - name: Run WordPress Coding Standards
-      run: phpcs --standard=WordPress .
+      run: |
+        vendor/bin/phpcs --standard=WordPress .
+
     - name: Build WordPress Theme/Plugin
       run: |
         cd wp-content/themes/your-theme
