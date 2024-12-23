@@ -48,4 +48,17 @@ jobs:
       with:
         name: build
 
-    - name: Se
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.HOST_IP }}:/tmp/build.tar.gz
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST_IP }} << 'EOF'
+          cd /var/www/demo
+          tar -xzf /tmp/build.tar.gz -C .
+          sudo systemctl restart nginx
+        EOF
+
