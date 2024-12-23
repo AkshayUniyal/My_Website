@@ -19,11 +19,9 @@ jobs:
         chmod +x phpcs.phar
         sudo mv phpcs.phar /usr/local/bin/phpcs
 
-    - name: Install WordPress Coding Standards
+    - name: Clone WordPress Coding Standards
       run: |
-        curl -OL https://github.com/WordPress-Coding-Standards/wpcs/archive/refs/heads/master.zip
-        unzip master.zip -d /tmp
-        mv /tmp/wpcs-master /tmp/wpcs
+        git clone https://github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
         phpcs --config-set installed_paths /tmp/wpcs
 
     - name: Run WordPress Coding Standards
