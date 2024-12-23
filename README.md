@@ -3,10 +3,10 @@ A full end LEMP website
 
 #######################################################################################################################
 
-VPS - AWS
-Public_Ip - 3.108.42.7
-Github repo - https://github.com/AkshayUniyal/My_Website
-Website Url - https://myprojec13.zapto.org/
+* VPS - AWS
+* Public_Ip - 3.108.42.7
+* Github repository - https://github.com/AkshayUniyal/My_Website
+* Website Url - https://myprojec13.zapto.org/
 
 #######################################################################################################################
 
@@ -46,7 +46,7 @@ Website Url - https://myprojec13.zapto.org/
 
 ## Wordpress Installation ##
 
-* Made necessary changes in /etc/nginx/sites-available/default -
+* Made necessary changes in /etc/nginx/sites-available/default 
 * Made Changes in /var/www/demo/wp-config.php -
    
       Database related entry ( DB name, DB user, Db Password )
@@ -77,7 +77,7 @@ Website Url - https://myprojec13.zapto.org/
 
 * Enabled ssl_prefer_server_ciphers
 
-* Incrased Buffer size for large responses 
+* Increased Buffer size for large responses 
 
 * Hardened file and directory permissions on instnace for more security
 
@@ -89,11 +89,11 @@ Website Url - https://myprojec13.zapto.org/
 
 * Added ssh key on github to connect with this instance
 
-* Setup git configuration in instance at - /var/www/demo directory
+* Setup git in instance at - /var/www/demo directory
 
 * Created custom ssh keys - public and private for more security 
 
-* Public ssh key was added in the authorized_keys of the instance and public key was given to github secrets for ssh connection in CI/CD pipeline 
+* Public ssh key was added in the authorized_keys of the instance and private key was given to github secrets for ssh connection in CI/CD pipeline 
 
 ## CI/CD Pipeline using Github Actions ##
 
