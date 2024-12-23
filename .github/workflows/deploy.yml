@@ -13,27 +13,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set up Git with GitHub token for authentication
+      run: |
+        git config --global credential.helper store
+        echo "https://x-access-token:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
+
+    - name: Clone WordPress Coding Standards
+      run: git clone https://github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
+
     - name: Install PHP CodeSniffer
       run: |
         curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
         chmod +x phpcs.phar
         sudo mv phpcs.phar /usr/local/bin/phpcs
 
-    - name: Set up Git with correct credentials
-      run: |
-        git config --global credential.helper store
-        git clone https://github.com/WordPress-Coding-Standards/wpcs.git /tmp/wpcs
-        phpcs --config-set installed_paths /tmp/wpcs
+    - name: Configure PHP CodeSniffer to use WordPress Coding Standards
+      run: phpcs --config-set installed_paths /tmp/wpcs
 
     - name: Run WordPress Coding Standards
       run: phpcs --standard=WordPress wp-content/themes/twentytwentythree
-
-    - name: Build WordPress Theme/Plugin
-      run: |
-        cd wp-content/themes/twentytwentythree
-        # Assuming you don't use Composer or NPM, you can skip these
-        # If you do need them, add them back as needed
-        echo "Building WordPress theme..."
 
     - name: Archive Built Code
       run: tar -czf build.tar.gz wp-content
