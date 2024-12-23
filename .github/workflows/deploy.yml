@@ -19,16 +19,6 @@ jobs:
         php-version: '8.3'  # Use PHP 8.3
         extensions: mbstring, xml, curl  # Specify any necessary PHP extensions
 
-    - name: Install NPM Dependencies (if applicable)
-      run: |
-        cd wp-content/themes/twentytwentythree
-        npm install  # Install JavaScript dependencies (if your theme uses NPM)
-
-    - name: Build WordPress Theme/Plugin (if applicable)
-      run: |
-        cd wp-content/themes/twentytwentythree
-        npm run build  # Build assets using npm (if applicable)
-
     - name: Run WordPress Coding Standards
       run: |
         cd wp-content/themes/twentytwentythree
